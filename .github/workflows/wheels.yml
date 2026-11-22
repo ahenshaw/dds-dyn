@@ -26,9 +26,11 @@ jobs:
       # The static Fast DDS build is the slow part (~15 min on Windows); reuse it
       # until build_deps.py or a patch changes. (Linux builds it inside the
       # manylinux container, where this cache can't reach.)
-      - name: Cache static Fast DDS (Windows)
+      # Restore/save split so the deps are cached even when a later step fails.
+      - name: Restore static Fast DDS (Windows)
+        id: deps-cache
         if: runner.os == 'Windows'
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: C:/fdd/install
           key: fdd-${{ runner.os }}-${{ hashFiles('build_deps.py', 'patches/**') }}
@@ -37,6 +39,19 @@ jobs:
         with:
           package-dir: .
           output-dir: wheelhouse
+
+      - name: Check static Fast DDS finished (Windows)
+        id: deps-done
+        if: always() && runner.os == 'Windows' && steps.deps-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: if (Test-Path C:/fdd/install/.fastdds-v3.6.2.done) { "done=true" >> $env:GITHUB_OUTPUT }
+
+      - name: Save static Fast DDS (Windows)
+        if: always() && steps.deps-done.outputs.done == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: C:/fdd/install
+          key: fdd-${{ runner.os }}-${{ hashFiles('build_deps.py', 'patches/**') }}
 
       - uses: actions/upload-artifact@v4
         with:

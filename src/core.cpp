@@ -217,7 +217,7 @@ void struct_from_py(const DataRef& d, const TypeRef& t, nb::handle v) {
                 throw;
             } catch (nb::cast_error&) {
                 throw nb::type_error((t->get_name().to_string() + "." + key + ": " +
-                                      nb::cast<std::string>(nb::str(nb::handle(val).type().attr("__name__"))) +
+                                      nb::cast<std::string>(nb::handle(val).type().attr("__name__")) +
                                       " value is the wrong type or out of range for " +
                                       kind_name(resolve(m.type))).c_str());
             } catch (nb::builtin_exception& e) {  // keep the Python exception type, add context
