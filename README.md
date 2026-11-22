@@ -37,6 +37,9 @@ It does not wrap the dynamic-types API, so every IDL type needs a `fastddsgen -p
 SWIG module compiled against the exact same Fast DDS build. fastdds-dyn has a smaller
 API, but a new IDL is just a file you load.
 
+If you do need Fast-DDS-python, [docs/building-fastdds-python.md](docs/building-fastdds-python.md)
+explains how to build it from source on Linux and Windows.
+
 ## API
 
 | | |
