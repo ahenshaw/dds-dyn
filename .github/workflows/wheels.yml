@@ -1,0 +1,54 @@
+# Build fastdds-dyn wheels for Linux (manylinux_2_28 x86_64) and Windows (AMD64),
+# CPython 3.9-3.11 plus one abi3 wheel for 3.12+. cibuildwheel runs
+# tests/test_loopback.py against every wheel. Settings live in pyproject.toml.
+#
+# If fastdds-dyn sits in a subdirectory of the repo, set `package-dir` below and
+# move this file to the repo's own .github/workflows/.
+name: wheels
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  wheels:
+    name: wheels (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      # The static Fast DDS build is the slow part (~15 min on Windows); reuse it
+      # until build_deps.py or a patch changes. (Linux builds it inside the
+      # manylinux container, where this cache can't reach.)
+      - name: Cache static Fast DDS (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/cache@v4
+        with:
+          path: C:/fdd/install
+          key: fdd-${{ runner.os }}-${{ hashFiles('build_deps.py', 'patches/**') }}
+
+      - uses: pypa/cibuildwheel@v4.3.5
+        with:
+          package-dir: .
+          output-dir: wheelhouse
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}
+          path: wheelhouse/*.whl
+
+  sdist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pipx run build --sdist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz

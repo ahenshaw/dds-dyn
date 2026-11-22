@@ -1,0 +1,46 @@
+diff --git a/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParser.hpp b/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParser.hpp
+index b993349..0cbaa45 100644
+--- a/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParser.hpp
++++ b/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParser.hpp
+@@ -503,6 +503,13 @@ struct action<semicolon>
+         { \
+             std::string type{#id \
+             }; \
++            /* Bind a string bound to this occurrence: one shared state slot would otherwise */ \
++            /* be applied to whichever string member get_type() resolves first. */ \
++            if ((type == "string" || type == "wstring") && state.count(type + "_size")) \
++            { \
++                type += "<" + state[type + "_size"] + ">"; \
++                state.erase(std::string{#id} + "_size"); \
++            } \
+             if (type == "sequence") \
+             { \
+                 state["type"] = type; \
+@@ -517,7 +524,7 @@ struct action<semicolon>
+                 state["element_type"] = type; \
+                 state["arithmetic_expr"] = ""; \
+             } \
+-            else if (type == "string" || type == "wstring") \
++            else if (type.compare(0, 6, "string") == 0 || type.compare(0, 7, "wstring") == 0) \
+             { \
+                 state["type"] = type; \
+                 state.erase("parsing_string"); \
+diff --git a/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParserContext.hpp b/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParserContext.hpp
+index b7c63df..3dfdc37 100644
+--- a/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParserContext.hpp
++++ b/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlParserContext.hpp
+@@ -302,6 +302,14 @@ public:
+         {
+             xtype = factory->get_primitive_type(TK_CHAR16);
+         }
++        else if (type.compare(0, 7, "string<") == 0 || type.compare(0, 8, "wstring<") == 0)
++        {
++            // bounded string tagged by the type action, e.g. "string<32>"
++            const bool wide = type[0] == 'w';
++            uint32_t length = static_cast<uint32_t>(std::atoi(type.c_str() + type.find('<') + 1));
++            type_builder = wide ? factory->create_wstring_type(length) : factory->create_string_type(length);
++            xtype = type_builder->build();
++        }
+         else if (type == "string")
+         {
+             uint32_t length = static_cast<uint32_t>(LENGTH_UNLIMITED);

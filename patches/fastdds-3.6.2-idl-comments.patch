@@ -1,0 +1,15 @@
+diff --git a/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlGrammar.hpp b/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlGrammar.hpp
+index 483bbd2..9bcdb87 100644
+--- a/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlGrammar.hpp
++++ b/src/cpp/fastdds/xtypes/dynamic_types/idl_parser/IdlGrammar.hpp
+@@ -32,7 +32,9 @@ using namespace tao::TAO_PEGTL_NAMESPACE;
+ struct line_comment : seq<star<space>, seq<one<'/'>, one<'/'>>, until<eolf>> {};
+ struct block_comment : seq<star<space>, seq<one<'/'>, one<'*'>>, until<seq<one<'*'>, one<'/'>>>, star<space>> {};
+ struct comment : sor<line_comment, block_comment> {};
+-struct ws : sor<comment, plus<space>> {};
++// any run of comments and whitespace (one comment only, before, broke 3+ comments
++// in a row wherever a single opt<ws> was allowed, e.g. at the top of a file)
++struct ws : plus<sor<comment, plus<space>>> {};
+ 
+ // octal digits
+ struct odigit : range<'0', '7'> {};
