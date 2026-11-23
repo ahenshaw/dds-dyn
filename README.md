@@ -1,11 +1,12 @@
-# fastdds-dyn
+# dds-dyn
 
-Fast DDS 3.6.2 for Python, packaged as a self-contained wheel. Types come from IDL
+Unofficial Python bindings for [eProsima Fast DDS](https://github.com/eProsima/Fast-DDS) 3.6.2,
+packaged as a self-contained wheel. Types come from IDL
 **at runtime** (Fast DDS's built-in IDL parser and dynamic types), and samples are
 plain Python dicts. There is no code generation and no compiler on the user's machine.
 
 ```python
-import fastdds_dyn as dds
+import dds_dyn as dds
 
 with dds.Participant(domain_id=42, name="me") as p:
     p.register_idl("Sensor.idl", "sensors::Reading")      # fully qualified name
@@ -21,8 +22,8 @@ with dds.Participant(domain_id=42, name="me") as p:
 ## Install
 
 ```bash
-pip install fastdds_dyn-0.1.0-cp312-abi3-manylinux_2_28_x86_64.whl   # Linux, Python 3.12+
-pip install fastdds_dyn-0.1.0-cp312-abi3-win_amd64.whl                # Windows, Python 3.12+
+pip install dds_dyn-0.1.0-cp312-abi3-manylinux_2_28_x86_64.whl   # Linux, Python 3.12+
+pip install dds_dyn-0.1.0-cp312-abi3-win_amd64.whl                # Windows, Python 3.12+
 ```
 
 Wheels are also built for CPython 3.9–3.11 (one per version). Fast DDS, Fast-CDR,
@@ -34,7 +35,7 @@ TLS, DDS security, SQLite persistence and statistics are compiled out.
 
 eProsima's [Fast-DDS-python](https://github.com/eProsima/Fast-DDS-python) is not on PyPI.
 It does not wrap the dynamic-types API, so every IDL type needs a `fastddsgen -python`
-SWIG module compiled against the exact same Fast DDS build. fastdds-dyn has a smaller
+SWIG module compiled against the exact same Fast DDS build. dds-dyn has a smaller
 API, but a new IDL is just a file you load.
 
 If you do need Fast-DDS-python, [docs/building-fastdds-python.md](docs/building-fastdds-python.md)
@@ -105,3 +106,15 @@ runs `tests/test_loopback.py` against every wheel.
 ```bash
 pipx run cibuildwheel --platform linux    # local, needs Docker -> wheelhouse/
 ```
+
+## Trademarks
+
+dds-dyn is an independent project. It is not affiliated with, endorsed by, or supported by
+eProsima. "Fast DDS" and "eProsima" are names of eProsima (Proyectos y Sistemas de
+Mantenimiento SL), used here only to say which library these bindings wrap.
+
+## Licenses
+
+dds-dyn is Apache-2.0. Each wheel statically links Fast DDS, Fast-CDR and their bundled
+third-party code, as well as nanobind, so it includes all their license texts under
+`dds_dyn/licenses/` in the installed package. See [licenses/README.md](licenses/README.md).

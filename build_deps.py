@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the static C++ dependencies of fastdds_dyn into one install prefix.
+"""Build the static C++ dependencies of dds_dyn into one install prefix.
 
     foonathan_memory_vendor v1.4.1, Fast-CDR v2.3.6, Fast DDS v3.6.2
     (the set pinned by Fast DDS v3.6.2's own fastdds.repos)

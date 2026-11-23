@@ -6,7 +6,7 @@ needed: the writer and reader share one participant.
 import os
 import sys
 
-import fastdds_dyn as dds
+import dds_dyn as dds
 
 IDL = r"""
 // comments and typedefs need no preprocessor
@@ -100,7 +100,7 @@ def test_loopback():
         expect(TypeError, w.write, {"u16": -1})
         expect(KeyError, p.create_writer, "Other", "demo::Missing", qos)
         expect(ValueError, p.register_idl_string, IDL, "Everything")   # not fully qualified
-    print(f"PASS fastdds_dyn {dds.__version__} on Fast DDS {dds.FASTDDS_VERSION}, "
+    print(f"PASS dds_dyn {dds.__version__} on Fast DDS {dds.FASTDDS_VERSION}, "
           f"Python {sys.version.split()[0]} ({sys.platform})")
 
 

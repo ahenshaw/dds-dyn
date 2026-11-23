@@ -9,11 +9,11 @@ builds a Python type module from your IDL with `fastddsgen -python`.
 >   produced a working Fast-DDS-python node. It exchanged data with Fast DDS C++, the HDDS
 >   Rust crate and the HDDS Python SDK, and every direction received 10/10 samples.
 > - **Windows** has *not* been tested end to end. The Fast DDS part uses the same CMake options
->   that build Fast DDS 3.6.2 on the GitHub Actions `windows-latest` runner for the `fastdds-dyn`
+>   that build Fast DDS 3.6.2 on the GitHub Actions `windows-latest` runner for the `dds-dyn`
 >   wheel. The SWIG and Python steps follow from those and from how Python loads DLLs on Windows.
 >   Expect to adjust paths.
 
-**If you don't need eProsima's own API, try `fastdds-dyn` (this repo, see the [README](../README.md)) first.**
+**If you don't need eProsima's own API, try `dds-dyn` (this repo, see the [README](../README.md)) first.**
 It is a pip-installable wheel for Linux and Windows with Fast DDS 3.6.2 linked in statically.
 It loads IDL at runtime and you pass samples as dicts. You don't need a compiler, SWIG, Java,
 or fastddsgen. The rest of this guide is for when you need the full `fastdds` SWIG API, or

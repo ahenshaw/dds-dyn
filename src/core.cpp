@@ -1,4 +1,4 @@
-// fastdds_dyn._core: a small Python binding of Fast DDS 3 built on its dynamic
+// dds_dyn._core: a small Python binding of Fast DDS 3 built on its dynamic
 // types. Types come from IDL at runtime (Fast DDS's own IDL parser); samples
 // are plain Python dicts. No code generation, no per-type compile step.
 
@@ -112,7 +112,7 @@ std::string kind_name(TypeRef t) {
 }
 
 [[noreturn]] void unsupported(const TypeRef& t) {
-    throw nb::type_error(("fastdds_dyn: unsupported IDL type " + kind_name(t) +
+    throw nb::type_error(("dds_dyn: unsupported IDL type " + kind_name(t) +
                           "; supported: primitives, strings, enums, structs, sequences, arrays").c_str());
 }
 
@@ -590,7 +590,7 @@ void set_log_level(const std::string& level) {
 }  // namespace
 
 NB_MODULE(_core, m) {
-    m.doc() = "Fast DDS dynamic-types binding (see fastdds_dyn)";
+    m.doc() = "Fast DDS dynamic-types binding (see dds_dyn)";
     m.attr("FASTDDS_VERSION") = FASTDDS_VERSION_STR;
     m.def("set_log_level", &set_log_level, nb::arg("level"));
 

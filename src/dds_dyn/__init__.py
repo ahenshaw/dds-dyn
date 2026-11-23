@@ -1,6 +1,6 @@
 """Fast DDS 3.6 for Python, with types loaded from IDL at runtime.
 
-    import fastdds_dyn as dds
+    import dds_dyn as dds
 
     with dds.Participant(domain_id=0, name="me") as p:
         p.register_idl("Sensor.idl", "sensors::Reading")

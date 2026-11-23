@@ -3,15 +3,15 @@ requires = ["scikit-build-core>=0.10", "nanobind>=2.4"]
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "fastdds-dyn"
+name = "dds-dyn"
 version = "0.1.0"
-description = "Fast DDS 3.6 for Python with runtime IDL types (dynamic types, samples as dicts)"
+description = "Unofficial Python bindings for eProsima Fast DDS 3.6 with runtime IDL types (dynamic types, samples as dicts)"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "Apache-2.0" }
 
 [project.urls]
-Source = "https://github.com/ahenshaw/fastdds-dyn"
+Source = "https://github.com/ahenshaw/dds-dyn"
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"
